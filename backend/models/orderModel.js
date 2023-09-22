@@ -1,4 +1,3 @@
-import { MongoServerClosedError } from "mongodb";
 import mongoose from "mongoose";
 
 const orderSchema = mongoose.Schema(
@@ -31,7 +30,7 @@ const orderSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    paymentResults: {
+    paymentResult: {
       id: { type: String },
       status: { type: String },
       update_time: { type: String },
@@ -54,6 +53,11 @@ const orderSchema = mongoose.Schema(
     },
     totalPrice: {
       type: Number,
+      required: true,
+      default: 0.0,
+    },
+    isPaid: {
+      type: Boolean,
       required: true,
       default: false,
     },
