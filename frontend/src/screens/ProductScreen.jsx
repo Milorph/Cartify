@@ -17,6 +17,7 @@ import {
 } from "../slices/productsApiSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Meta from "../components/Meta";
 import { useState } from "react";
 import { addToCart } from "../slices/cartSlice";
 
@@ -29,6 +30,10 @@ const ProductScreen = () => {
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [allReviewsDisplayed, setAllReviewsDisplayed] = useState(false);
+  const loadAllReviews = () => {
+    setAllReviewsDisplayed(true);
+  };
 
   const {
     data: product,
@@ -75,6 +80,7 @@ const ProductScreen = () => {
         <Message variant="danger">{error.data.message || error.error}</Message>
       ) : (
         <>
+          <Meta title={product.name} description={product.description} />
           <Row>
             <Col md={5}>
               <Image src={product.image} alt={product.name} fluid />
@@ -159,19 +165,34 @@ const ProductScreen = () => {
               </Card>
             </Col>
           </Row>
-          <Row className="review">
+
+          <Row className="review mt-3">
             <Col md={6}>
               <h2>Reviews</h2>
+
               {product.numReviews === 0 && <Message>No Reviews</Message>}
               <ListGroup variant="flush">
-                {product.review.slice(0, 5).map((review) => (
-                  <ListGroup.Item key={review._id}>
-                    <strong>{review.name}</strong>
-                    <Rating value={review.rating} />
+                {allReviewsDisplayed
+                  ? product.review.map((review) => (
+                      <ListGroup.Item key={review._id}>
+                        <strong>{review.name}</strong>
+                        <Rating value={review.rating} />
 
-                    <p>{review.comment}</p>
-                  </ListGroup.Item>
-                ))}
+                        <p>{review.comment}</p>
+                      </ListGroup.Item>
+                    ))
+                  : product.review.slice(0, 5).map((review) => (
+                      <ListGroup.Item key={review._id}>
+                        <strong>{review.name}</strong>
+                        <Rating value={review.rating} />
+
+                        <p>{review.comment}</p>
+                      </ListGroup.Item>
+                    ))}
+                {!allReviewsDisplayed && product.numReviews > 5 && (
+                  <button onClick={loadAllReviews}>Load All Reviews</button>
+                )}
+
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
 
