@@ -66,7 +66,7 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
-              // ADMIN Navbar
+
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title="Admin" id="adminmenu">
                   <LinkContainer to="/admin/productlist">
